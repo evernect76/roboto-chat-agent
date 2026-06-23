@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roboto Tokyo Grill</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;700;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        background: #09090e;
+        color: #e8e2d9;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 300;
+      }
+
+      /* ── Full-viewport container ── */
+      .page {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 3rem 3.5rem;
+        overflow: hidden;
+      }
+
+      /* ── Ghost kanji background ── */
+      .bg-kanji {
+        position: absolute;
+        right: -2.5rem;
+        bottom: -3rem;
+        font-family: "Noto Serif JP", "DM Sans", sans-serif;
+        font-size: clamp(18rem, 38vw, 42rem);
+        line-height: 1;
+        color: rgba(200, 48, 42, 0.055);
+        user-select: none;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── Thin top bar ── */
+      .topbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.4rem 3.5rem;
+        border-bottom: 1px solid #1e1e28;
+      }
+
+      .topbar-logo {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 0.95rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #e8e2d9;
+      }
+      .topbar-logo em {
+        color: #c8302a;
+        font-style: normal;
+      }
+
+      .topbar-tag {
+        font-size: 0.68rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #4a4a5a;
+      }
+
+      /* ── Hero content ── */
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.36em;
+        text-transform: uppercase;
+        color: #e5831a;
+        margin-bottom: 1.5rem;
+        opacity: 0;
+        animation: up 0.65s 0.1s ease forwards;
+      }
+
+      .hero-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: clamp(4.5rem, 11vw, 9.5rem);
+        line-height: 0.88;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+      }
+
+      .hero-title .l1 {
+        display: block;
+        color: #e8e2d9;
+        opacity: 0;
+        animation: up 0.65s 0.2s ease forwards;
+      }
+      .hero-title .l2 {
+        display: block;
+        color: transparent;
+        -webkit-text-stroke: 1.5px #c8302a;
+        opacity: 0;
+        animation: up 0.65s 0.3s ease forwards;
+      }
+      .hero-title .l3 {
+        display: block;
+        color: #c8302a;
+        opacity: 0;
+        animation: up 0.65s 0.4s ease forwards;
+      }
+
+      .hero-sub {
+        margin-top: 2rem;
+        max-width: 390px;
+        font-size: 0.92rem;
+        color: #5a5a70;
+        line-height: 1.75;
+        opacity: 0;
+        animation: up 0.65s 0.5s ease forwards;
+      }
+
+      @keyframes up {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── "Chat now" prompt — anchored above the widget ── */
+      .chat-prompt {
+        position: absolute;
+        bottom: 108px;
+        right: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+        z-index: 10;
+        opacity: 0;
+        animation: up 0.65s 0.9s ease forwards;
+      }
+
+      .chat-prompt-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.73rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7a7a90;
+      }
+
+      /* Pulsing dot */
+      .chat-dot {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        flex-shrink: 0;
+      }
+      .chat-dot::before,
+      .chat-dot::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #e5831a;
+      }
+      .chat-dot::after {
+        background: transparent;
+        border: 1px solid #e5831a;
+        animation: ping 1.6s ease-out infinite;
+      }
+      @keyframes ping {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(2.8);
+          opacity: 0;
+        }
+      }
+
+      /* Down-right arrow */
+      .chat-arrow {
+        width: 20px;
+        height: 20px;
+        color: #3a3a4a;
+      }
+
+      /* ── Bottom status strip ── */
+      .status-strip {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        padding: 1.1rem 3.5rem;
+        border-top: 1px solid #1e1e28;
+        gap: 2.5rem;
+      }
+
+      .status-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .status-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #3a3a4a;
+      }
+      .status-value {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
+        color: #6a6a80;
+      }
+
+      .status-divider {
+        width: 1px;
+        height: 28px;
+        background: #1e1e28;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 600px) {
+        .page,
+        .topbar,
+        .status-strip {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+        .topbar-tag {
+          display: none;
+        }
+        .hero-title {
+          font-size: clamp(3.5rem, 16vw, 5rem);
+        }
+        .status-strip {
+          gap: 1.25rem;
+        }
+        .chat-prompt {
+          bottom: 100px;
+          right: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- Ghost character -->
+      <div class="bg-kanji" aria-hidden="true">炉</div>
+
+      <!-- Top bar -->
+      <div class="topbar">
+        <span class="topbar-logo"
+          >Roboto<em> · </em>Tokyo<em> · </em>Grill</span
+        >
+        <span class="topbar-tag">New York · Est. 2019</span>
+      </div>
+
+      <!-- Hero -->
+      <div class="hero-content">
+        <p class="hero-eyebrow">Tokyo-style robata grill</p>
+        <h1 class="hero-title">
+          <span class="l1">Roboto</span>
+          <span class="l2">Tokyo</span>
+          <span class="l3">Grill</span>
+        </h1>
+        <p class="hero-sub">
+          Fire-kissed skewers &amp; Japanese street food.<br />
+          Ask our agent anything — menu, orders, hours.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- RETELL CHAT WIDGET -->
+    <script
+      id="retell-widget"
+      src="https://dashboard.retellai.com/retell-widget-v2.js"
+      data-public-key="public_key_35163ac2f5fe6b1c44bee"
+      data-agent-id="agent_f4b8f7e6545098bbf367861f40"
+
+      data-title="Roboto Tokyo Grill"
+      data-fab-text="Order Here"
+      data-bot-name="Roboto AI"
+
+      data-theme-color="#c8302a"
+      data-component-color="#e5831a"
+
+      data-logo-url="637533295226831674+426713.avif"
+      data-popup-message="Ready to order?"
+      data-show-ai-popup="true"
+      data-show-ai-popup-time="2"
+      data-auto-open="true"
+    ></script>
+
+    <!-- Enlarge the Retell widget header logo (no Shadow DOM, no size attribute exposed by the widget) -->
+    <style>
+      img[src*="roboto-tokyo-grill-logo"] {
+        width: 40px !important;
+        height: 40px !important;
+        object-fit: contain !important;
+        border-radius: 50% !important;
+      }
+    </style>
+  </body>
+</html>
